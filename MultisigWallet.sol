@@ -2,11 +2,9 @@
 pragma solidity ^0.8.28;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-import "./HashFoxDAO.sol"; // Importation de HashFoxDAO
+import "./HashFoxDAO.sol"; // DAO import
 
-contract MultiSigWallet is Ownable {
-    using SafeMath for uint256;
+contract MultiSigWallet is Ownable(msg.sender) {
 
     uint256 public requiredSignatures;
     address[] public signers;
@@ -39,7 +37,9 @@ contract MultiSigWallet is Ownable {
     /// @notice Ajouter une signature à une proposition de la DAO
     function signProposal(uint256 _proposalId) external onlySigner {
         require(!proposalSignatures[_proposalId][msg.sender], "Signer already voted");
-        require(block.timestamp < hashFoxDAO.proposals(_proposalId).endTime(), "Voting ended");
+        require(block.timestamp < hashFoxDAO.getProposalEndTime(_proposalId), "Voting ended");
+
+    
 
         proposalSignatures[_proposalId][msg.sender] = true;
         emit ProposalSigned(msg.sender, _proposalId);
@@ -47,12 +47,12 @@ contract MultiSigWallet is Ownable {
 
     /// @notice Exécuter une proposition de la DAO si suffisamment de signatures ont été obtenues
     function executeProposal(uint256 _proposalId) external onlySigner {
-        require(block.timestamp >= hashFoxDAO.proposals(_proposalId).endTime(), "Vote not ended");
+        require(block.timestamp >= hashFoxDAO.getProposalEndTime(_proposalId), "Vote not ended");
         
         uint256 signedCount = 0;
         for (uint256 i = 0; i < signers.length; i++) {
             if (proposalSignatures[_proposalId][signers[i]]) {
-                signedCount = signedCount.add(1);
+                signedCount += 1;
             }
         }
 
@@ -69,3 +69,4 @@ contract MultiSigWallet is Ownable {
         requiredSignatures = _requiredSignatures;
     }
 }
+
