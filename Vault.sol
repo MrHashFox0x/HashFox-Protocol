@@ -3,11 +3,11 @@ pragma solidity ^0.8.28;
 
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC4626.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
-import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
-import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import "@chainlink/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 
-contract ProjectVault is ERC4626, AccessControl, ReentrancyGuard {
+contract Vault is ERC4626, AccessControl, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     bytes32 public constant ARTIST_ROLE = keccak256("ARTIST_ROLE");
@@ -97,6 +97,11 @@ contract ProjectVault is ERC4626, AccessControl, ReentrancyGuard {
         IERC20(asset()).safeTransferFrom(msg.sender, address(this), amount);
     }
 
+    function returnCollateral(uint projectId) external view returns(uint256) {
+        return projects[projectId].collateralDeposited;
+    }
+
+
     function invest(uint256 projectId, uint256 amount) external nonReentrant {
         Project storage project = projects[projectId];
         require(!project.fundingComplete, "Funding already complete");
@@ -120,8 +125,8 @@ contract ProjectVault is ERC4626, AccessControl, ReentrancyGuard {
             project.fundingComplete = true;
             emit FundingComplete(projectId, project.totalRaised);
 
-            bool success = IERC20(asset()).safeTransfer(project.artist, project.totalRaised);
-            require(success, "Transfer to artist failed");
+             IERC20(asset()).safeTransfer(project.artist, project.totalRaised);
+            
         }
     }
 
@@ -205,3 +210,4 @@ contract ProjectVault is ERC4626, AccessControl, ReentrancyGuard {
         return projects[projectId].investors;
     }
 }
+
