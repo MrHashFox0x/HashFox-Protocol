@@ -10,9 +10,9 @@ const config: HardhatUserConfig = {
     settings: {
       optimizer: {
         enabled: true,
-        runs: 200, // Nombre de fois que le contrat sera optimisé
+        runs: 200, 
       },
-      viaIR: true, // Active l'utilisation de IR pour éviter l'erreur de pile trop profonde
+      viaIR: true,
     },
   },
   networks: {
