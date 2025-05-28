@@ -9,7 +9,7 @@ contract HashFoxDAO is Ownable(msg.sender) {
     GovernanceToken public governanceToken;
     uint256 public proposalCount;
 
-    uint256 public quorumPercentage = 10; // Quorum 10% total supply
+    uint256 public quorumPercentage = 10; 
 
     struct Proposal {
         string description;
@@ -48,7 +48,7 @@ contract HashFoxDAO is Ownable(msg.sender) {
 
 
 
-    /// @notice Vote based on HFX held
+   
     function vote(uint256 _proposalId) external {
         Proposal storage proposal = proposals[_proposalId];
 
