@@ -34,7 +34,7 @@ contract MultiSigWallet is Ownable(msg.sender) {
         hashFoxDAO = HashFoxDAO(_hashFoxDAO);
     }
 
-    /// @notice Ajouter une signature à une proposition de la DAO
+   
     function signProposal(uint256 _proposalId) external onlySigner {
         require(!proposalSignatures[_proposalId][msg.sender], "Signer already voted");
         require(block.timestamp < hashFoxDAO.getProposalEndTime(_proposalId), "Voting ended");
@@ -45,7 +45,7 @@ contract MultiSigWallet is Ownable(msg.sender) {
         emit ProposalSigned(msg.sender, _proposalId);
     }
 
-    /// @notice Exécuter une proposition de la DAO si suffisamment de signatures ont été obtenues
+   
     function executeProposal(uint256 _proposalId) external onlySigner {
         require(block.timestamp >= hashFoxDAO.getProposalEndTime(_proposalId), "Vote not ended");
         
@@ -63,7 +63,7 @@ contract MultiSigWallet is Ownable(msg.sender) {
         emit ProposalExecuted(_proposalId);
     }
 
-    /// @notice Modifier le nombre de signatures nécessaires pour exécuter une proposition
+   
     function setRequiredSignatures(uint256 _requiredSignatures) external onlyOwner {
         require(_requiredSignatures <= signers.length, "Invalid required signatures count");
         requiredSignatures = _requiredSignatures;
