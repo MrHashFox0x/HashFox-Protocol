@@ -58,7 +58,7 @@ contract MultiSigWallet is Ownable(msg.sender) {
 
         require(signedCount >= requiredSignatures, "Not enough signatures");
 
-        // Si suffisamment de signatures, on exécute la proposition de la DAO
+   
         hashFoxDAO.executeProposal(_proposalId);
         emit ProposalExecuted(_proposalId);
     }
