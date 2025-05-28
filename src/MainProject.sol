@@ -35,7 +35,7 @@ contract MainProject is AccessControl {
     }
 
     /**
-     * @dev Crée un nouveau projet et déploie un nouveau contract Vault associé.
+     
      */
     function createProject(
         address _artist,
@@ -53,7 +53,7 @@ contract MainProject is AccessControl {
         require(_loanToValueRatio > 0 && _loanToValueRatio <= 100, "Invalid loan to value ratio");
         require(_liquidationLoanToValueRatio > 0 && _liquidationLoanToValueRatio <= 100, "Invalid LLTV");
 
-        // Déploiement d'un nouveau contrat Vault
+       
         Vault vault = new Vault(
             IERC20(_stablecoin)
         );
