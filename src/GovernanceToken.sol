@@ -141,12 +141,12 @@ contract GovernanceToken is ERC20, ERC20Burnable, ERC20Permit, ERC20Votes, Ownab
         }
     }
 
-    // Resolving the nonces function conflict
+  
     function nonces(address owner) public view virtual override(ERC20Permit, Nonces) returns (uint256) {
     return super.nonces(owner);
 }
 
-    // Required override for compatibility between ERC20Votes and ERC20Permit
+ 
     function _update(address from, address to, uint256 value) internal override(ERC20, ERC20Votes) {
         super._update(from, to, value);
     }
